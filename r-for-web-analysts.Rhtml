@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <title>R for Web Analysts</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="/css/normalize.css">
+  <link rel="stylesheet" href="/css/skeleton.css">
+  <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+  <script src="/js/r-tutorial.js"></script>
+  <script type="text/javascript" async src="//platform.twitter.com/widgets.js"></script>
+
+</head>
+<body>
+  <!--begin.rcode echo=FALSE
+      set.seed(125124)
+      ho0 <- knit_hooks$get('output')
+
+      knit_hooks$set(
+         output = function(x, options) {
+            paste0("<div class='wrapoutput'>", ho0(x,options), "</div>")
+    }
+  )
+      end.rcode -->
+  <div class="container">
+    <h1>R for web analysts</h1>
+    <p>An introduction and guide to the R programming language for web analysts</p>
+    <p>If you are new to programming then take your time reading. There are lots
+      of new concepts - don't expect to be able to scan through and still get
+      good value for time</p>
+
+    <h4>About this document</h4>
+    <p>Last updated on <!--rinline format(Sys.time(), "%A %d %B %Y") --></p>
+    <p>This document is an extension and improvement of the course materials
+      I originally prepared for the <a href="http://www.measurecamp.org/">MeasureCamp</a>
+      training session on using R. The original materials are available
+      <a href="http://www.eanalytica.com/files/using-r.pdf">here</a></p>
+    <p>The goal of the document (and the training session) is to help web
+      analysts get to grips with coding using R and enable them to solve the kind
+      of problems that web analysts try to solve.</p>
+    <p>Unlike the training sessions I am not there to help people along so I am hoping
+      this document contains enough details, examples and background for people to
+      progress without me. This means it has ended up being quite long.</p>
+    <p>Get help by clicking the "Get help" link to the right of each section.</p>
+    <p>Throughout the document, code samples are presented in the following format:</p>
+    <!--begin.rcode message=FALSE, prompt=TRUE
+        2+2
+        end.rcode -->
+    <p>First the R code which can be copied or typed into the console (if you don't know
+      what the console is - this will be explained later) and then the output you can expect
+      to see when it is run.</p>
+    <p>There will be some code samples where no output is presented. This is either because
+      when the code is run there is no output to the console or because I have chosen to not
+      make the results of evaluating that code public.</p>
+    <p>I highly recommend running all the sample code you come accross</p>
+
+    <h4>About me</h4>
+    <p>A little bit of context about me might help you decide whether or not my advice is
+      worth listening to. If your background, experiences and desired outcomes are completely
+      different from mine then take this document with the pinch of salt it deserves.</p>
+    <h5>Web analyst background</h5>
+    <p>I started my career working in PPC and began to make an effort to learn more about web
+      analytics after gaps and errors in client implementations lead me to take actions that
+      appeared awesome but which were actually harmful.</p>
+    <p>My favourite example of this is when I sent tonnes of traffic from Nigeria at a lead
+      generation form - the form got filled in a lot (which is what was being tracked) but
+      the client did not make very much money from this.</p>
+    <p>My experience ranges across a wide range of sectors but it is very narrow when it comes
+      to tools. Almost all (95%+) my work is done using Google Analytics.</p>
+    <h5>Programming background</h5>
+    <p>I studied Maths at university which, with the courses I chose, involved about 8-12 hours
+      of programming tuition using the languages Maple and Matlab. At the end of university I
+      could not use programming to produce useful business outcomes. However, I could produce a
+      sweet animated gif showing how a fourier series converges.</p>
+    <p>It wasn't long after entering the professional world that I began to think that learning
+      to code might be useful. This was probably at the time when the
+      "everyone must learn to code" movement was getting started.</p>
+    <p>I began learning a language called <a href="https://www.haskell.org/">Haskell</a> because
+      I had studied a small amount of category theory at university which meant that I got some
+      of the jokes about how difficult Haskell is to learn. Those of you who know me well will
+      know that picking the difficult choice like this is fairly typical behaviour for me.</p>
+    <p>If you want to learn more about computing and maths and aren't in a massive rush to get
+      something useful done then I really recommend you have a good look at Haskell. I believe
+      that one day Haskell, or a language inspired by Haskell, will take over the world but that
+      day will not be soon and right now Haskell is shit for the kind of tasks web analysts typically
+      do.</p>
+    <p>The first language is the hardest to learn so once I had a bit of basic coding knowledge I
+      was able to start dabbling in Python and then later R. With the sort of tasks I do right now
+      most of my coding is in R.</p>
+
+    <h4>Why learn R?</h4>
+    <p>I often get asked "should I learn R?" type questions. The answer is <strong>not</strong>
+      an emphatic "YES" and the trade offs to consider are complicated.</p>
+
+    <h5>Learning R for analysts who are first time coders</h5>
+    <p>For an analyst who has no experience with programming the "should I learn R?" question
+      is actually two questions:
+      <ol>
+        <li>Should I learn to code?</li>
+        <li>Should the first language I learn be R?</li>
+      </ol>
+    </p>
+    <p>The answer to the first question <strong>is</strong> an emphatic yes because being able to
+      program enables you to use more powerful tools than you would use otherwise.</p>
+    <p>There is a significant opportunity cost to learning to code, especially to start with, when
+      doing simple things in code takes way longer than doing them in Excel. But the payoff is huge,
+      especially when you consider that you have the whole of the rest of your career to recoup the
+      investment.</p>
+    <p>I am going to reiterate that point because it is very important. To start with, everything will
+      take longer and you won't be able to do anything cool. The stuff you start off coding will be the
+      type of thing that would take you less then a minute in Excel. It is worth it to spend the time to
+      build this foundation. This is not specific to R - you will have this problem with any programming
+      language.</p>
+    <p>R is good for doing analytical tasks so it is appropriate for analysts to learn as a first
+      language. The code samples in this document will hopefully help speed you over the
+      "I can do this 10x quicker in Excel" gap.</p>
+    <p>A current trend is to blur and narrow the boundary between analysis and the operations
+      that implement the insight. It is increasingly common for a hybrid coder/analyst to define behaviours
+      that identify a user segment <em>and</em> to code site functionality that does something special
+      with this user segment. If this kind of work is your end goal and you only have time to learn one
+      programming language then first you should try to remove your "one programming language" constraint
+      and then if that doesn't work you should learn Python.</p>
+
+    <h5>Learning R for analysts who can code in something else already</h5>
+    <p>Once you ignoring the fact that learning new things generally makes you a better person the case for
+      learning R over another language that you already know is much weaker. For me, the main strengths of R
+      compared to other languages I have used are:</p>
+    <ol>
+      <li>The library and language support for the type of tasks that analysts do is excellent</li>
+      <li>Libraries implementing cutting edge techniques straight out of academia are more likely
+        to be available in R than elsewhere. This sounds really cool, but if you are the sort of person
+        where this is <em>actually</em> a really useful feature then this guide is far too basic
+        for you.</li>
+      <li>The support for charting and visualisation is extremely good</li>
+    </ol>
+    <p>In al of these areas, particularly 1 and 3, Python is rapidly catching up with R. So if the language
+      you already know is Python then knowing R too will not increase the amount of cool stuff you can do by
+      as much as if the language you already know is PHP.</p>
+
+    <h4>Getting Started</h4>
+    <h5>Installing the necessary programs</h5>
+    <p>Firstly install R from one of these pages
+      <ul>
+        <li><a href="http://cran.r-project.org/bin/windows/base/">Windows</a></li>
+        <li><a href="http://cran.r-project.org/bin/macosx">Mac</a></li>
+        <li>Linux users can get it from your distribution's repositories - I'm not going to hold your hand
+          for this</li>
+      </ul>
+    </p>
+    <p>That is all you <em>need</em> to do but you will probably find things way easier if you also install
+      a piece of software call RStudio. RStudio sits on top of R and presents a much less intimidating
+      user interface. I highly recommend it for beginners.</p>
+    <p>Install RStudio from <a href="http://www.rstudio.com/products/rstudio/download/">here</a>.
+      The rest of this tutorial will assume you are using RStudio.
+    </p>
+    <p>Both R and RStudio are free software both in terms of "free as in free beer" and "free as in freedom".
+      There is much to be said for and against the use of free software in business but my view is that for
+      things like programming tools free software completely dominates the non free alternatives.</p>
+    <p>On opening RStudio you should see a pane on the left called the console. You enter R commands in this pane
+      with the cursor after the "&gt;" character. Press enter to run the command.</p>
+    <!--begin.rcode message=FALSE, prompt=TRUE
+        2+15
+        end.rcode-->
+    <p>If you get the answer 17 when you type "2+15" and then press enter then things have installed correctly.
+      You have got over the first hurdle. Well done.</p>
+
+    <h5>The very basics</h5>
+    <p>You have just seen (and replicated for yourself) an example of adding two numbers together. The other
+      foundational aritmetic functions work in similar ways. Try these examples out and test out your own.</p>
+    <!--begin.rcode prompt=TRUE
+        3-21.5
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        2*5
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        9/5
+        end.rcode-->
+    <p>The next set of examples is similar but slightly more complicated. I've included comments in the code
+      to make it easier to understand. A comment is a line that starts with a "#" character. A comment line
+      does nothing to change the behaviour of a program - it is only for a person reading it</p>
+    <!--begin.rcode prompt=TRUE
+        # This line is a comment
+        # Comments don't return any output
+        end.rcode-->
+    <p>Note that there is no output from the above code block. On with the examples</p>
+    <!--begin.rcode prompt=TRUE
+        2 + (5*5)
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        2*pi # pi is the number pi (3.14159...)
+        end.rcode-->
+    <p>Not every arithmetical operation makes sense</p>
+    <!--begin.rcode prompt=TRUE
+        1/0
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        # Dividing the number 5 by the letter 'a'
+        # This makes no sense!
+        5/'a'
+        end.rcode-->
+    <p>In this error message the "binary operator" is division. It is a binary operation because it takes
+      two numbers as input - the numerator and the denominator. The "non-numeric argument" is the letter
+      'a'.</p>
+    <p>Ok, now you can throw away your pocket calculator or abacus and use R instead.</p>
+    <p>It is far more useful to do things to a whole list of numbers rather than one or two numbers at a
+      time. R has <em>excellent</em> support for this. You might see people talking about "vectors"
+      instead of "lists"; these do not necessarily mean the same thing, but for the purposes of this tutorial
+      the difference is not important</p>
+    <p>Create a list with more than one element like this:</p>
+    <!--begin.rcode prompt=TRUE
+        c("This","is","a","list","of","words")
+        end.rcode-->
+    <p>There are some functions that operate on a whole list and return a single answer. I call these
+      <em>aggregate functions</em>. There will be more about functions in general later.</p>
+    <!--begin.rcode prompt=TRUE
+        # get the length of a list (the number of elements)
+        length(c("This","is","a","list","of","words"))
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        # add up all the elements in a list
+        sum(c(1,2,3,4,5))
+        end.rcode-->
+    <p>Other functions operate on each element of the list and return another list as the result</p>
+    <!--begin.rcode prompt=TRUE
+        # make everything uppercase
+        toupper(c("This","is","a","list","of","words"))
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        # adds 2 to each element of the list
+        c(1,2,3,4,5) + 2
+        end.rcode-->
+    <p>In fact, when we were doing simple arithmetic before, we weren't just adding numbers together;
+      we were adding together lists of numbers - but the lists only had one element</p>
+    <!--begin.rcode prompt=TRUE
+        length(5)
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        # use '==' to check if two things are equal
+        "moist" == c("moist")
+        end.rcode-->
+    <p>This means we can do things like this:</p>
+    <!--begin.rcode prompt=TRUE
+        c(1,2,3) + c(pi,15,1/0)
+        end.rcode-->
+    <p>Or this:</p>
+    <!--begin.rcode
+        c(1,2,3,4) * c(1,2)
+        end.rcode-->
+    <p>In the above example, the shorter list is duplicated until it is the same length as the longer
+      list</p>
+    <p>As always, there are some things we can try to do that just don't make sense</p>
+    <!--begin.rcode prompt=TRUE
+        c(1,2,3,4) + c(1,2,3)
+        end.rcode-->
+    <p>As you can see, you get a warning that R isn't quite sure if you want to be doing this or not.</p>
+    <h5>Variables</h5>
+    <p>You can assign a particular result to a variable to make it easier to refer to later</p>
+    <p>In R people generally use "&lt;-" to assign to a variable, but you might also see code where people
+      use "=". I think there is some kind of subtle difference between the two methods but this is not
+      important right now. In this document we will use "&lt;-".</p>
+    <p>In this code block assign a list to the variable "mylist"</p>
+    <!--begin.rcode prompt=TRUE
+        mylist <- c("This","is","a","list","of","words")
+        end.rcode-->
+    <p>You can see the value of a variable by entering it into the console</p>
+    <!--begin.rcode prompt=TRUE
+        mylist
+        end.rcode-->
+    <p>We can use all the normal list functions on our variable as if we had typed the whole thing out
+      each time</p>
+    <!--begin.rcode prompt=TRUE
+        length(mylist)
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        toupper(mylist)
+        end.rcode-->
+    <p>You can also overwrite a variable by reusing the name when you assign something else</p>
+    <!--begin.rcode prompt=TRUE
+        mylist <- c(1,2,3,4)
+        mylist
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        sum(mylist)
+        end.rcode-->
+    <p>It will help you out a lot if you use variable names that semantically link with what they
+      reference. For example call a list of daily sessions "sessions" rather than "list".</p>
+    <h5>Functions</h5>
+    <p>You have already seen some functions like "sum" and "length".</p>
+    <p>To get more information on what a function does type a question mark followed by the name
+      of the function into the console.</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        # help with the sum function
+        ?sum
+        end.rcode-->
+    <p>You don't need to be able to understand all of a functions help file to use the function.</p>
+    <p>Some functions have optional arguments. Here is an example:</p>
+    <!--begin.rcode prompt=TRUE
+        # create a variable called "x"
+        # the "NA" is used for a blank or missing value
+        # it is quite common to have these
+        x <- c(1,2,3,4,NA)
+
+        sum(x)
+        end.rcode-->
+    <p>Summing over a list that contains an NA returns NA as the result. This makes sense when you
+      think that it is meaningless to add NA to a number.</p>
+    <!--begin.rcode prompt=TRUE
+        sum(x, na.rm=TRUE)
+        end.rcode-->
+    <p>Instead we use the optional argument "na.rm=TRUE" to tell the sum function to ignore the NA
+      values.</p>
+    <p>Use the function help to see a list of function arguments and what they mean (e.g. "?sum").</p>
+    <p>You can also make your own functions which helps speed up tasks you end up doing a lot. For
+      example, if you were always wanting to insert a new element at the start of a list you could
+      write a function like this:</p>
+    <!--begin.rcode prompt=TRUE
+        # assign to the name of the function as you would a variable
+        # then use "function" followed by the aguments
+        addToStartOfList <- function(element,oldlist) {
+            # the actual work is done inside these curly brackets {}
+            newlist <- c(element,oldlist)
+            # finally "return" the result
+            return(newlist)
+        }
+
+        # call your function as you would any other function
+        addToStartOfList(5,c(1,2,3,4))
+        end.rcode-->
+    <p>When copying this code into RStudio, don't copy the "+" symbols that appear at the start of
+      each line - they show that R is expecting more input before it starts computing. This means
+      you don't always have to fit all your commands on one line.</p>
+
+    <h5>Data frames</h5>
+    <p>So far we have looked at lists which contain one dimensional data. Far more common is to
+      have a table of two dimensional data. The most common way of working with this kind of structure
+      in R is called a <em>data frame</em>.</p>
+    <!--begin.rcode prompt=TRUE
+        foods <- data.frame(meal=c("Breakfast","Breakfast","Breakfast","Lunch","Dinner"),
+                            food=c("Bacon","Sausage","Beans","Pork Pie","Raveoli"),
+                            amount=c(2,2,387,1,35)
+                           )
+        foods
+        end.rcode-->
+    <p>You can see that when creating your own data frame the columns are just lists with a column name.
+      Use the <em>names</em> function to see the column names for a data frame.</p>
+    <!--begin.rcode prompt=TRUE
+        names(foods)
+        end.rcode-->
+    <p>Use the column numbers and row numbers to select rows, columns and elements from a data frame.</p>
+    <!--begin.rcode prompt=TRUE
+        # select the third row
+        foods[3,]
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        # select the first column
+        foods[,1]
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        # see the number of beans consumed
+        foods[3,3]
+        end.rcode-->
+    <p>An easier way to select a column is like this:</p>
+    <!--begin.rcode prompt=TRUE
+        foods$meal
+        end.rcode-->
+    <p>Using a "$" followed by the name of the column is much easier to understand than trying to remember
+      which is the eighth column when you are reading old code.</p>
+    <p>Once you have selected a column is behaves just like a list:</p>
+    <!--begin.rcode prompt=TRUE
+        # use "?mean" if you don't know what this function does 
+        mean(foods$amount)
+        end.rcode-->
+    <p>You can easily add a new column to a data frame in a similar way to how you assign a variable.</p>
+    <!--begin.rcode prompt=TRUE
+        foods$cumulativeAmount <- cumsum(foods$amount)
+
+        foods
+        end.rcode-->
+    <p>Filter rows in a data frame like this:</p>
+    <!--begin.rcode prompt=TRUE
+        # note the position of the comma - easy to miss!
+        foods[foods$amount > 5,]
+        end.rcode-->
+    <p>Filters can be combined using "&" for AND and "|" for OR.</p>
+    <!--begin.rcode prompt=TRUE
+        foods[foods$amount > 5 & foods$meal == "Breakfast",]
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        foods[foods$amount > 5 | foods$meal == "Breakfast",]
+        end.rcode-->
+    <p>To see the number of rows in a data frame use the function "nrow" rather than length. I don't
+      know why this is and it seems a bit stupid to me.</p>
+    <!--begin.rcode prompt=TRUE
+        nrow(foods)
+        end.rcode-->
+    <p>There is also a function called "ncol" for the number of columns.</p>
+
+    <h5>Exercises</h5>
+    <p>R comes with several open data sets built in. For these exercises we will use the "mtcars" data set
+      which contains some statistics about certain makes/models of car.
+      Here is how to load it up:</p>
+    <!--begin.rcode prompt=TRUE
+        data(mtcars)
+
+        # now you have a data frame called "mtcars" with the data
+        head(mtcars)
+        end.rcode-->
+    <p>You can find out more about the data by typing "?mtcars" into the console.</p>
+    <ol>
+      <li>What is the mean mpg across all the cars?
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE
+              mean(mtcars$mpg)
+              end.rcode-->
+      </div></li>
+      <li>What is the maximum number of cylinders seen in the data?
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE
+              max(mtcars$cyl)
+              end.rcode-->
+      </div></li>
+      <li>What is the difference in the mean mpg between cars with fewer than 5 cylinders and those with 5
+        or more cylinders?
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE
+              fewcylinders <- mtcars[mtcars$cyl < 5,]
+              manycylinders <- mtcars[mtcars$cyl >= 5,]
+              difference <- mean(manycylinders$mpg) - mean(fewcylinders$mpg)
+
+              abs(difference)
+              end.rcode-->
+        </div></li>
+      <li>What proportion of the tested cars have an automatic transmission?
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE
+              automatic <- mtcars[mtcars$am == 0,]
+
+              nrow(automatic) / nrow(mtcars)
+              end.rcode-->
+      </div></li>
+      <li>Which car has the fastest quarter mile time?
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE
+              # order the data
+              fastest <- mtcars[order(mtcars$qsec),]
+
+              # get the car name from the first row
+              row.names(fastest)[1]
+              end.rcode-->
+      </div></li>
+      <li>Write a function which takes an mpg value as input and retuns a list of all cars
+        that have a better mpg than the input value.
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE
+              betterMpg <- function(targetmpg) {
+                filteredcars <- mtcars[mtcars$mpg > targetmpg,]
+                return( row.names(filteredcars) )
+              }
+
+              betterMpg(30)
+              end.rcode-->
+          </div></li>
+    </ol>
+
+    <h4>Importing data</h4>
+    <p>This section covers importing data into R though two methods:
+      <ol>
+        <li>CSV files</li>
+        <li>The Google Analtics API</li>
+      </ol>
+    </p>
+    <p>The first is by far the easiest so we will start with that.</p>
+    <h5>Importing from CSV files</h5>
+    <p>There is a simple function for importing from CSV files called "read.csv". The CSV file
+      is converted into a data frame when it is loaded into R.</p>
+    <!--begin.rcode prompt=TRUE
+        # yes - it works with urls and local files
+        hospitaladmissions <- read.csv("http://www.eanalytica.com/files/UK-Admissions.csv")
+
+        head(hospitaladmissions)
+        end.rcode-->
+    <p>Use "?read.csv" to see more information about this function. There are many optional
+      arguments that enable you to work with things like tab separated files or files without
+      proper column headers.</p>
+    <p>You can write CSV files using the function "write.csv". In the following example writes the
+      mtcars data frame to a tab separated variable file.</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        # \t means tab
+        write.csv(mtcars, file="/tmp/mtcars.tsv", sep="\t")
+        end.rcode-->
+    <p>You should change the file argument to save the data to a location of your choice.</p>
+
+    <h5>Google Analytics</h5>
+    <p>This is where things get tricky and a lot of people start to get errors which they
+      can't find a way past. Take your time and proceed with close attention to detail.</p>
+    <p>There are four parts to getting this working:
+      <ol>
+        <li>Generating OAuth client ID and client secret to enable you to access the API</li>
+        <li>Installing a relevant R library</li>
+        <li>Generating an authorisation token using the library</li>
+        <li>Finally, getting some data out of Google Analytics</li>
+      </ol>
+    </p>
+    <p>You will need a Google Analytics account with some data to do all of this.</p>
+
+    <h6>Generating the client ID and client secret</h6>
+    <p>Follow these instructions precisely.</p>
+    <p>Common mistakes to be avoided include the following:
+      <ol>
+        <li>Reusing the client id and client secret from an old project of the wrong type.
+          It is safest to generate a fresh project for use with R.</li>
+        <li>Generating the wrong type of credentials.</li>
+        <li>Forgetting to enable the Analytics API.</li>
+      </ol>
+    </p>
+    <p>Here are the instructions. Let me know any parts that are particularly unclear and
+      I will illustrate with screenshots.</p>
+    <ol>
+      <li>Go to <a href="https://console.developers.google.com/project">https://console.developers.google.com/project</a></li>
+      <li>Click "create project"</li>
+      <li>The project name and the project id are not very important, but you should name
+        it something meaningful so you don't accidentally delete it at a later date. Ignore
+        the advanced options and click "create".</li>
+      <li>Wait for the project to be created. When it is created you are automatically redirected to the project page</li>
+      <li>Click "enable an API" on the bottom right. The button may be hidden behind the messages notification dialogue</li>
+      <li>Find the analytics API in the long list of APIs and click the button labelled "OFF" in the status column to enable it</li>
+      <li>In the side menu on the right click "credentials" which is part of the "APIs &amp; Auth" menu section</li>
+      <li>Click "create new client ID"</li>
+      <li>Select "installed application" as the application type and the click "configure consent screen"</li>
+      <li>Fill in the details in the consent screen form. Only email address and product name are compulsory. Click "save"</li>
+      <li>Select "installed application" as the application type. Then select "other" as the installed application type. Click "create client ID"</li>
+    </ol>
+    <p>You should now see your client ID and client secret on the screen. If you also see
+      things like "email address" and "javascript origins" then you have generated the wrong
+      type of client ID and should start again from step eight.</p>
+    <p>Store the client id and client secret in some R variables.</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        clientid <- "YOUR CLIENT ID"
+        clientsecret <- "YOUR CLIENT SECRET"
+        end.rcode-->
+
+    <h6>Installing R libraries</h6>
+    <p>An R library is a collection of functions written by someone else that they have made available
+      for you to use. There is a centralised collection of vetted R libraries called <a href="http://cran.r-project.org/web/packages/available_packages_by_date.html">CRAN</a>. Libraries which are available on CRAN are very easy to install.</p>
+    <p>The function to install a CRAN library is <em>install.packages</em>. To start with, install
+      the library "Rcpp" - not having an up to date version of this library causes some people
+      problems later in the process and installing the latest version now does not harm and can
+      prevent errors later on.</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        install.packages("Rcpp")
+        end.rcode-->
+    <p>If you get errors about a lack of file system permissions doing this then you will have to
+      ask your IT department to install libraries for you.</p>
+    <p>There are three main choices of libraries to work with Google Analytics in R:
+      <ol>
+        <li><a href="http://cran.r-project.org/web/packages/RGA/index.html">RGA</a></li>
+        <li><a href="http://cran.r-project.org/web/packages/RGoogleAnalytics/">RGoogleAnalytics</a> - this
+          is supported by <a href="http://www.tatvic.com/">Tatvic</a></li>
+        <li><a href="https://github.com/skardhamar/rga">rga</a> - not available on CRAN so slightly harder
+          to install. There are some API techniques to reduce how often sampled data is returned; this
+          library makes these easier to use than the others.</li>
+      </ol>
+    <p>All the libraries are similar in both how they operate and what you can do with them. For this
+      tutorial we will use RGA.</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        install.packages("RGA")
+        end.rcode-->
+
+    <h6>Generating a token</h6>
+    <p>In this section you will authorise R to access Google Analytics data and create a token file
+      which saves the details. This means you will not have to authorise every time and it enables
+      you to automate things to run on a server; just make sure the token file is on the server.</p>
+    <p>First load the library into R using the <em>library</em> function. Sometimes you will see
+      people use the function <em>require</em> instead. The difference between them is beyond the
+      scope of this tutorial.</p>
+    <!--begin.rcode prompt=TRUE
+        library(RGA)
+        end.rcode-->
+    <p>Then use the <em>authorize</em> function. You will have to insert your own filepath to store the
+      authetication token.</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        cachelocation <- "LOCATION TO STORE TOKEN"
+        token <- authorize(client.id = clientid, 
+                           client.secret = clientsecret,
+                           cache = cachelocation  
+                          )
+        end.rcode-->
+    <p>This will open up your <strong>default</strong> browser where a web page will ask you to
+      confirm that this application is to be allowed to access Google Analytics data. Once you
+      have confirmed this you should get a message saying that it was a success and that you
+      can return to R.</p>
+    <p>As emphasised above, the page will open in your default browser. I have seen people have
+      problems with this if their default browser is Internet Explorer.</p>
+
+    <h6>Get some data</h6>
+    <p>The first thing to do is to figure out the view ID of the Google Analytics view you want
+      to pull data from. Confusingly the RGA library calls "views" "profiles". When I use "profile"
+      I will mean "view".</p>
+    <p>Use the function <em>list_profiles</em> to see a data frame with all the profiles you can
+      access with your access token.</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        list_profiles(token=token)
+        end.rcode-->
+    <p>You will see output from this but I have not included mine for confidentiality reasons.</p>
+    <p>The profile ID is the number in the ID column. Pick the one you want to use</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        # replace the ID NUMBER with the profile id number
+        # keep the "ga:" bit at the beginning
+        profileid <- "ga:ID NUMBER"
+        end.rcode-->
+    <p>We are almost ready to grab some data. But first we will install another library that makes it
+      easier to work with dates.</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        install.packages("lubridate")
+        end.rcode-->
+    <p>Here we go!</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        library(lubridate)
+
+        yesterday <- today() - days(1)
+        twoyearsago <- today() - days(365*2)
+
+        sessions <- get_ga(profileid, 
+                           start.date=twoyearsago, 
+                           end.date=yesterday,
+                           dimensions="ga:date",
+                           metrics="ga:sessions",
+                           token=token
+                          )
+       end.rcode-->
+    <p>You will now have a data frame called "sessions" with the daily sessions total for the
+      last two years.</p>
+    <!--begin.rcode echo=FALSE, results='hide'
+        # Loading sessions in from pre-saved CSV.
+        # This makes generation of the document quicker
+        # and means that I won't accidentally leak client data
+        library(lubridate)
+        sessions <- read.csv("~/text/sessions.csv")
+        sessions$date <- ymd(sessions$date)
+        end.rcode-->
+    <!--begin.rcode prompt=TRUE
+        head(sessions)
+        end.rcode-->
+    <p>If this is working for you then you have got the R part working.</p>
+    <h5>Exercises</h5>
+    <p>There is just a short set of exercises here which are mainly based around knowing the
+      Google Analytics reporting API. The best resource for getting to grips with this is the
+      <a href="https://ga-dev-tools.appspot.com/explorer/">Query Explorer</a>.</p>
+    <ol>
+      <li>Query the API using more than one dimension (e.g. date and browser).
+        <div class="answer">
+          An example is:
+          <!--begin.rcode prompt=TRUE, eval=FALSE
+              browsersessions <- get_ga(profileid, 
+                                        start.date=twoyearsago, 
+                                        end.date=yesterday,
+                                        dimensions="ga:date,ga:browser",
+                                        metrics="ga:sessions",
+                                        token=token
+                                       )
+              end.rcode-->
+        </div>
+      </li>
+      <li>Query the API using more than one metric.
+        <div class="answer">
+         <!--begin.rcode prompt=TRUE, eval=FALSE
+              sessionsevents <- get_ga(profileid, 
+                                       start.date=twoyearsago, 
+                                       end.date=yesterday,
+                                       dimensions="ga:date,ga:browser",
+                                       metrics="ga:sessions,ga:totalEvents",
+                                       token=token
+                                      )
+              end.rcode-->
+        </div>
+      </li>
+      <li>Query the API using a custom segment. The <a href="https://developers.google.com/analytics/devguides/reporting/core/v3/segments#reference">segment reference documentation</a> might be useful here.
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE, eval=FALSE
+              twitter <- get_ga(profileid, 
+                                start.date=twoyearsago, 
+                                end.date=yesterday,
+                                dimensions="ga:date",
+                                metrics="ga:sessions",
+                                segment="dynamic::ga:source=~twitter",
+                                token=token
+                                )
+              end.rcode-->
+        </div>
+      </li>
+      <li>Query the API pulling data from last month. The dates should be generated dynamically so that
+        you can run the exact same code when you rerun the report next month. Be careful - what happens
+        when you run your code in January?
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE, eval=FALSE
+              # load lubridate in case it isn't loaded
+              library(lubridate)
+
+              # get a day in the last month
+              onemonthago <- now() - months(1)
+
+              # round to the start of the month
+              startofmonth <- floor_date(onemonthago, units="month")
+
+              # round to the end of the month
+              endofmonth <- ceiling_date(onemonthago, units="month")
+
+              # get the GA data
+              sessions <- get_ga(profileid, 
+                           start.date=startofmonth, 
+                           end.date=endofmonth,
+                           dimensions="ga:date",
+                           metrics="ga:sessions",
+                           token=token
+                          )             
+                          end.rcode-->
+        </div>
+      </li>
+    </ol>
+
+    <h4>ggplot</h4>
+    <p>ggplot is the best platform for making non-interactive visualisations/charts in the world.</p>
+    <p>First, as you might expect, install the library.</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        install.packages("ggplot2")
+        end.rcode-->
+    <p>First you will see a series of example charts using the sessions data frame made earlier with
+      data pulled from Google Analytics earlier.</p>
+    <!--begin.rcode prompt=TRUE, fig.height=8, fig.width=12
+        # load the library
+        library(ggplot2)
+
+        ggplot(sessions,aes(x=date,y=sessions)) + geom_line()
+        end.rcode-->
+    <p>Plot the data as translucent points and a smoothed line</p>
+    <!--begin.rcode prompt=TRUE, fig.height=8, fig.width=12
+        ggplot(sessions,aes(x=date,y=sessions)) +
+            geom_point(alpha=0.2) +
+            geom_smooth()
+            end.rcode-->
+    <p>Plot a histogram of the number of daily sessions</p>
+    <!--begin.rcode prompt=TRUE, fig.height=8, fig.width=12
+        ggplot(sessions,aes(x=sessions)) + geom_histogram()
+        end.rcode-->
+    <p>Change the theme to something more minimal</p>
+    <!--begin.rcode prompt=TRUE, fig.height=8, fig.width=12
+        ggplot(sessions,aes(x=date,y=sessions)) +
+            geom_line() +
+            theme_minimal()
+            end.rcode-->
+    <p>Add a horizontal red line to see which days are better and worse than the mean</p>
+    <!--begin.rcode prompt=TRUE, fig.height=8, fig.width=12
+        avg <- mean(sessions$sessions)
+        ggplot(sessions,aes(x=date,y=sessions)) +
+            geom_line() +
+            geom_hline(yintercept=avg, size=5, color="red") + 
+            theme_minimal()
+            end.rcode-->
+    <p>Change the axis labels, make them bigger and add a chart title</p>
+    <!--begin.rcode prompt=TRUE, fig.height=8, fig.width=12
+        ggplot(sessions,aes(x=date,y=sessions)) +
+            geom_line() +
+            theme_minimal() +
+            xlab("Date") +
+            ylab("Number of sessions") +
+            ggtitle("Sessions per day over two years") +
+            theme(axis.title.x = element_text(size = 20),
+                  axis.title.y = element_text(size = 20),
+                  plot.title = element_text(size = 25))
+                  end.rcode-->
+
+    <h5>The grammer of graphics</h5>
+    <p>ggplot implements an idea called "the grammer of graphics" which is a way of thinking about
+      and describing charts.</p>
+    <p>Essentially there are three elements:
+      <ul>
+        <li>The data</li>
+        <li>Aesthetics that can be mapped to dimensions in the data</li>
+        <li>Layers that control how different aesthetics are expressed</li>
+      </ul>
+    </p>
+    <p>For an example, consider this bar chart:
+      <!--begin.rcode echo=FALSE, fig.width=12, fig.height=8
+          df <- data.frame(person=c("Pirate","Pirate","Fergie","Fergie","Cyclops","Cyclops"),
+                           Attribute=c("Legs","Eyes","Legs","Eyes","Legs","Eyes"),
+                           count=c(1,1,2,2,2,1)
+                           )
+          ggplot(df, aes(x=person, y=count, fill=Attribute)) +
+            geom_bar(position="dodge", stat="identity") +
+            xlab("Person") +
+            ylab("Number person has") +
+            theme_bw() +
+            theme(axis.title.x = element_text(size = 20),
+                  axis.title.y = element_text(size = 20))
+                  end.rcode-->
+      There are three aesthetics here:
+      <ol>
+        <li>The count of things - expressed on the y axis</li>
+        <li>The attribute - expressed by the color and position of the bars</li>
+        <li>The person - expressed by the position of the bars</li>
+      </ol>
+    </p>
+    <p>I feel I am not explaining this very well - this is at least partly because it
+      is a difficult and unusual concept. The <a href="http://www.amazon.co.uk/dp/0387981403/ref=cm_sw_su_dp?tag=ggplot2-20">ggplot book</a>
+      explains this in more detail and has tonnes of nice examples [the affiliate link
+      is not mine - it is the author's own]. For something that focusses more on the
+      grammer of graphics concept and less on how ggplot implements it and which is free
+      check out the <a href="http://byrneslab.net/classes/biol607/readings/wickham_layered-grammar.pdf">Layered Grammer of Graphics</a>
+      paper in PDF.</p>
+    <p>Anyway, the following image will hopefully make it a little bit clearer how all
+      this works in ggplot.</p>
+    <img src="/files/ggplot-exp.png"/>
+    <p>The following example (using the mtcars data) shows a few more asthetics (colour and
+      size).</p>
+    <!--begin.rcode prompt=TRUE, fig.width=12, fig.height=8
+        ggplot(mtcars, aes(x=mpg,y=qsec, size=wt*1000, color=as.factor(cyl))) +
+           geom_point(alpha=0.8) +
+           xlab("Miles per gallon") +
+           ylab("Quarter mile time (s)") +
+           scale_color_discrete(guide = guide_legend(title = "Cylinders")) +
+           scale_size_continuous(guide = guide_legend(title = "Weight (lbs)")) +
+           theme_minimal()
+           end.rcode-->
+
+    <h6>Getting more help with ggplot</h6>
+    <p>ggplot is a big library with a very broad scope so it is often difficult to know
+      what is and isn't possible as well as what functions are provided for you. Thankfully,
+      because of ggplot's fairly unique name Googling for help works well. This is not true
+      for R in general.</p>
+    <p>The <a href="http://docs.ggplot2.org/current/">official documentation</a> is also
+      excellent.</p>
+
+    <h5>Exercises</h5>
+    <p>These exercises use builtin data set (like mtcars) because then everyone is starting from the same
+      place so it is possible for me to provide solutions. I encourage you to try similar
+      plots on data pulled in from Google Analytics.</p>
+    <p>My guess is that you will find these exercises harder than the others because you have not been
+      introduced to all the functions you will need to complete them./p>
+    <ol>
+      <li>Using the mtcars data draw a boxplot showing the amount of horsepower for engines with
+        differing numbers of cylinders.
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE, fig.width=12, fig.height=8
+              data(mtcars)
+
+              ggplot(mtcars,aes(x=as.factor(cyl),y=hp)) + geom_boxplot()
+              end.rcode-->
+        </div>
+      </li>
+      <li>Add a point representing each car to the chart created in the previous task.
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE, fig.width=12, fig.height=8
+              box <- ggplot(mtcars,aes(x=as.factor(cyl),y=hp)) + geom_boxplot()
+
+              # box + geom_point() will work, but geom_jitter is better
+              box + geom_jitter(color="blue", alpha=0.4, size=5)
+              end.rcode-->
+        </div>
+      </li>
+      <li>Using the mtcars data set make a scatter plot (geom_point()) of the power to
+        weight ratio against the quarter mile time.
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE, fig.width=12, fig.height=8
+              ggplot(mtcars,aes(x=hp/wt,y=qsec)) + geom_point()
+              end.rcode-->
+        </div>
+      </li>
+      <li>Change your plot from the last task into a faceted plot, faceted on the number
+        of cylinders.
+        <div class="answer">
+          <!--begin.rcode prompt=TRUE, fig.width=12, fig.height=8
+              ggplot(mtcars,aes(x=hp/wt,y=qsec, color=as.factor(cyl))) +
+                 geom_point(size=3, alpha=0.8) +
+                 facet_grid(. ~ cyl) +
+                 guides(color=FALSE)
+                 end.rcode-->
+        </div>
+      </li>
+    </ol>
+    
+    <h4>Forecasting</h4>
+    <p>R has good library support for many methods of forecasting. I suspect
+      that it has the best and easiest support out of all the languages you
+      might use for this.</p>
+    <p>The <em>forecast</em> package is the one we will use in this tutorial.</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        install.packages("forecast")
+        end.rcode-->
+    <p>The examples in this section use the "sessions" data frame containing daily Google
+      Analytics sessions generated earlier.</p>
+    <!--begin.rcode prompt=TRUE
+        head(sessions)
+        end.rcode-->
+    <p>To start to use the forecast package we must convert this data frame into a timeseries.
+      For the purpose of this example we are interested in forecasts that take into account
+      weekly seasonality (by which I mean the common phenomenom that some days of the week
+      are normally better than others).</p>
+    <!--begin.rcode prompt=TRUE
+        library(forecast)
+
+        # use 7 for the frequency because there are 7 observations
+        # per week.
+        sessionsts <- ts(sessions$sessions, frequency=7)
+        end.rcode-->
+    <p>Once you have created a timeseries you can do interesting things very easily.</p>
+    <!--begin.rcode prompt=TRUE, fig.width=12, fig.height=24
+        comp <- decompose(sessionsts)
+
+        # not interested in fancy ggplot here
+        # just do something simple
+        # the meaning of the resulting chart is explained below
+        plot(comp)
+        end.rcode-->
+    <p>Above you see a collection of four charts.
+      <ol>
+        <li>A plot of the raw data - nothing fancy here</li>
+        <li>A plot of the underlying trend - this has the weekly seasonality and any outliers removed.
+          It is way easier to see what is going on.</li>
+        <li>The weekly seasonality</li>
+        <li>The random bits of the data that don't fit anywhere else</li>
+      </ol>
+      This analysis makes the assumption that the results you see are the sum of the
+      underlying trend, the weekly seasonal factors and some randomness. These assumptions fit
+      a lot of metrics you see in web analytics.
+    </p>
+    <p>A nice and simple forecasting model is Holt Winters [by simple, I mean simple to use].
+      I don't want to get too much into the maths here, but
+      if forecasting is very important for you then you should have a look for yourself.</p>
+    <p>Building the forecast model is very easy:</p>
+    <!--begin.rcode prompt=TRUE, fig.width=12, fig.height=8
+        forecastmodel <- HoltWinters(sessionsts)
+        plot(forecastmodel)
+        end.rcode-->
+    <p>This plot shows how closely our forecasting model is fitting the original data.</p>
+    <p>If the fit looks good then proceed to making a forecast:</p>
+    <!--begin.rcode prompt=TRUE, fig.width=12, fig.height=8
+        sessionforecast <- forecast.HoltWinters(forecastmodel, h=30) # 30 days in future
+        plot(sessionforecast, xlim=c(100,109))
+        end.rcode-->
+    <p>The shaded areas represent 80% and 95% prediction intervals for the forecast.</p>
+    <p>The plot above is quite ugly and this in the kind of thing to put in reports. With
+      a bit of funkiness we can make a much nicer ggplot version.</p>
+    <!--begin.rcode prompt=TRUE, fig.width=12, fig.height=8, warning=FALSE
+        forecastdf <- as.data.frame(sessionforecast)
+        totalrows <- nrow(sessions) + nrow(forecastdf)
+        lastdaysessions <- tail(sessions$sessions,1)
+
+        forecastdata <- data.frame(day=c(1:totalrows), 
+                           actual=c(sessions$sessions,rep(NA,nrow(forecastdf))),
+                           forecast=c(rep(NA,nrow(sessions)-1),
+                                      lastdaysessions,
+                                      forecastdf$"Point Forecast"),
+                           forecastupper=c(rep(NA,nrow(sessions)-1),
+                                           lastdaysessions,
+                                           forecastdf$"Hi 80"),
+                           forecastlower=c(rep(NA,nrow(sessions)-1),
+                                           lastdaysessions,
+                                           forecastdf$"Lo 80")
+                           )
+
+        ggplot(forecastdata, aes(x=day)) + 
+            geom_line(aes(y=actual),color="black") + 
+            geom_line(aes(y=forecast),color="blue") + 
+            geom_ribbon(aes(ymin=forecastlower,ymax=forecastupper),
+                        alpha=0.4, fill="green") + 
+            xlim(c(720,750)) +
+            ylim(c(0,300)) +
+            xlab("Day") +
+            ylab("Sessions") +
+            theme_minimal()
+            end.rcode-->
+
+    <h5>Further resources</h5>
+    <ul>
+      <li>There is a big <a href="https://www.otexts.org/fpp">open textbook on forecasting</a></li>
+      <li><a href="http://a-little-book-of-r-for-time-series.readthedocs.org/en/latest/src/timeseries.html">A little book of R for timeseries</a>
+        is briefer and has less maths</li>
+    </ul>
+
+    <h5>Exercises</h5>
+    <p>If you've got this far then well done! As a special treat, these exercises
+      don't have my example answers.</p>
+    <ol>
+      <li>Use the same methods as above to build a revenue forecast. Once you've done this you can unlock the
+       <strong><em>"make condecending remarks to Excel users who don't code"</em></strong> achievement</li>
+      <li>The HoltWinters() function has an optional argument to specify whether the
+        seasonality is additive or multiplicative. Which type of forecast fits your
+        data better?</li>
+      <li>Make a function that alerts you if a forecasted value drops below a threshold.</li>
+      <li>Create a function that produces an alert if the actual value is
+        outside the 80% prediction range for the forecast. i.e. For day
+        <em>n</em>, make a forcast for day <em>n</em> using data from the last <em>n-1</em>
+        days. Then compare the values for day <em>n</em> with the forecast.</li>
+    </ol>
+        
+    
+    <h4>Automating reporting with Knitr</h4>
+    <p>The scientific community has, for years, had problems with the
+      reproducibility of research. Often, raw data (in the rare
+      circumstances) when it is available has been processed in obscure ways
+      before the paper is written up. This means that it is difficult to go
+      from the data to the conclusions in the paper.</p>
+    <p>This, particularly the bit about obscure data pipelines is also very
+      common for web analysts.</p>
+    <p>
+      Libraries have been developed to enable scientists to embed the
+      processing and analysis of their data into their paper. This helps
+      make their research reproducible.
+    </p>
+    <p>
+      The best R library for doing this is called Knitr (because it 'knits'
+      together computation and presentation. And because it replaces a
+      library called Sweave).
+    </p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        install.packages("knitr")
+        end.rcode-->
+    <p>
+      Knitr takes an input file that contains a mixture of R code, layout
+      instructions and descriptive text. The R code is evaluated and the
+      results are inserted into the file.
+    </p>
+    <p>
+      The input file can be written in many formats (markdown, latex etc.)
+      but for this we will use HTML as I'm assuming you have some kind of
+      familiarity with it.
+    </p>
+    <p>
+      Place the following code in document called knitr-test.Rhtml (the
+      .Rhtml is the important bit).
+    </p>
+    <p>Create the file using some kind of plain text editor (notepad, or whatever
+      you use to write HTML) and make sure to save it somewhere where you know the
+      filepath.</p>
+    <!-- ugly as fuck escaped html. Is there a better way? -->
+    <pre>
+      <code>
+        &lt;html&gt;
+          &lt;head&gt;
+            &lt;title&gt;My first Knitr report&lt;/title&gt;
+          &lt;/head&gt;
+          &lt;body&gt;
+            &lt;p&gt;Knitr can insert values inline. &amp;pi; is &lt;!--rinline pi --&gt;&lt;/p&gt;
+            &lt;p&gt;And can evaluate whole blocks of code
+              &lt;!--begin.rcode
+                  Sys.Date()
+                  end.rcode--&gt;
+            &lt;/p&gt;
+          &lt;/body&gt;
+        &lt;/html&gt;
+      </code>
+    </pre>
+    <p>Then "knit" the above file into some proper HTML output</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        library(knitr)
+        # this makes life way easier when sharing reports containing charts
+        # the images are included inline so you only have to worry about
+        # one file
+        opts_knit$set(upload.fun = image_uri)
+
+        knit("PATH/TO/YOUR/FILE.Rhtml", output="PATH/TO/OUTPUT/FILE.html")
+        end.rcode-->
+    <p>Open the output file in your browser. It will look ugly but you should see
+      the value of &pi; and today's date inserted correctly.</p>
+
+    <h5>A more advanced example</h5>
+    <p>This example doesn't do anything clever with presentation or HTML. But it does load
+      up a saved Google Analytics auth token from a file and then output some GA data.</p>
+    <pre>
+      <code>
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;My first Knitr report&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;!--begin.rcode echo=FALSE, message=FALSE
+      library(ggplot2)
+      library(RGA)
+      library(lubridate)
+      t &lt;- readRDS(&quot;LOCATION OF YOUR TOKEN&quot;)
+      token &lt;- t[[1]]
+      profileid &lt;- &quot;ga:YOUR PROFILE ID&quot;
+
+      yesterday &lt;- today() - days(1)
+      twoyearsago &lt;- today() - days(365*2)
+      ga_data &lt;- get_ga(profileid,
+                        start.date=twoyearsago,
+                        end.date=yesterday,
+                        dimensions=&quot;ga:date&quot;,
+                        metrics=&quot;ga:sessions&quot;,
+                        token=token)
+    end.rcode --&gt;
+
+    &lt;!--begin.rcode echo=FALSE
+       #the kable function outputs an HTML table from a data frame
+       kable(head(ga_data))
+    end.rcode--&gt;
+    &lt;p&gt;Here is some insightful commentary about the above table&lt;/p&gt;
+
+    &lt;!--begin.rcode echo=FALSE, fig.height=8, fig.width=12
+       ggplot(ga_data,aes(x=date,y=sessions)) + geom_line()
+    end.rcode--&gt;
+    &lt;p&gt;And here is some commentary about the above chart&lt;/p&gt;
+      
+  &lt;/body&gt;
+&lt;/html&gt;
+      </code>
+    </pre>
+    <p>So with the kable function from knitr and plotting from ggplot you can generate
+      templates that outputs HTML tables and charts into a static file. You can use all of
+      your usual web design wizardry (including javascript) to make it look good. Then you
+      can either make the output file available on the internet somewhere or you can email
+      it as an attachment.</p>
+    <p>I have two main processes with this:
+      <ul>
+        <li>Scheduled reports that are generated on a server entirely automatically. The
+          output files are then accessible on the internet (or intranet) for those who
+          use them.</li>
+        <li>Regular reports that I need to add commentary or insight to. For these I knit
+          the file together, look at the updated data, updated my commentary in the template
+          and then knit again to get the data and commentary to match. These are normally sent
+          via email.</li>
+      </ul>
+    </p>
+    <h5>An even more advanced example</h5>
+    <p>This document is produced using Knitr. The .Rhtml file will be available soon.</p>
+
+    <h4>Progressing with R</h4>
+    <p>Thank you for persevering this far and well done. Getting this far on your own shows
+      that you have the skills and pig headedness to learn new technical things.</p>
+    <p>If you want use this to progress further with R then here are a few resources and
+      avenues to get you started.
+      <ul>
+        <li><a href="http://markedmondson.me/">Mark Edmondson's blog</a> contains some
+          great stuff on R and he works with web analytics.</li>
+        <li><a href="http://www.wallpaperingfog.co.uk/">Neil Charles</a> writes a lot about
+          Tableau and football. But he does occasionally post on R and he does work with
+          some web data.</li>
+        <li><a href="http://www.r-bloggers.com/">The R Bloggers network</a> aggregates blog
+          posts from many different sources. Almost all of it won't be useful for whatever
+          it is you want to do but there are occasional nuggets of gold.</li>
+        <li>For charting inspiration check out <a href="http://www.sr.bham.ac.uk/~ajrs/R/r-gallery.html">this gallery</a>
+        </li>
+      </ul>
+    </p>
+    <p>Once again, thank you for reading this guide. Please let me know any feedback you might have.</p>
+      
+
+  </div>
+</body>
+</html>
