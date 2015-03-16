@@ -210,35 +210,41 @@
       two numbers as input - the numerator and the denominator. The "non-numeric argument" is the letter
       'a'.</p>
     <p>Ok, now you can throw away your pocket calculator or abacus and use R instead.</p>
-    <p>It is far more useful to do things to a whole list of numbers rather than one or two numbers at a
-      time. R has <em>excellent</em> support for this. You might see people talking about "vectors"
-      instead of "lists"; these do not necessarily mean the same thing, but for the purposes of this tutorial
-      the difference is not important</p>
-    <p>Create a list with more than one element like this:</p>
+    <p>It is far more useful to do things to a whole series of numbers rather than one or two numbers at a
+      time. R has <em>excellent</em> support for this.</p>
+    <p>
+      There are two main different representations of an series of elements:
+      <ol>
+        <li>A vector - all the elements must have the same type e.g. all numbers or all text</li>
+        <li>A list - the elements can have different types</li>
+      </ol>
+      Unless specifically mentioned otherwise you will use vectors in this tutorial.
+    </p>
+    <p>Create a vector with more than one element like this:</p>
     <!--begin.rcode prompt=TRUE
         c("This","is","a","list","of","words")
         end.rcode-->
-    <p>There are some functions that operate on a whole list and return a single answer. I call these
+    <p>There are some functions that operate on a whole vector and return a single answer. I call these
       <em>aggregate functions</em>. There will be more about functions in general later.</p>
     <!--begin.rcode prompt=TRUE
-        # get the length of a list (the number of elements)
-        length(c("This","is","a","list","of","words"))
+        # get the length of a vector (the number of elements)
+        length(c("This","is","a","vector","of","words"))
         end.rcode-->
     <!--begin.rcode prompt=TRUE
-        # add up all the elements in a list
+        # add up all the elements in a vector
         sum(c(1,2,3,4,5))
         end.rcode-->
-    <p>Other functions operate on each element of the list and return another list as the result</p>
+    <p>Other functions operate on each element of the vector and return another vector as the result</p>
     <!--begin.rcode prompt=TRUE
         # make everything uppercase
         toupper(c("This","is","a","list","of","words"))
         end.rcode-->
     <!--begin.rcode prompt=TRUE
-        # adds 2 to each element of the list
+        # adds 2 to each element of the vector
         c(1,2,3,4,5) + 2
         end.rcode-->
     <p>In fact, when we were doing simple arithmetic before, we weren't just adding numbers together;
-      we were adding together lists of numbers - but the lists only had one element</p>
+      we were adding together vectors of numbers - but the vectorss only had one element</p>
     <!--begin.rcode prompt=TRUE
         length(5)
         end.rcode-->
@@ -254,8 +260,8 @@
     <!--begin.rcode
         c(1,2,3,4) * c(1,2)
         end.rcode-->
-    <p>In the above example, the shorter list is duplicated until it is the same length as the longer
-      list</p>
+    <p>In the above example, the shorter vector is duplicated until it is the same length as the longer
+      vector.</p>
     <p>As always, there are some things we can try to do that just don't make sense</p>
     <!--begin.rcode prompt=TRUE
         c(1,2,3,4) + c(1,2,3)
@@ -266,32 +272,32 @@
     <p>In R people generally use "&lt;-" to assign to a variable, but you might also see code where people
       use "=". I think there is some kind of subtle difference between the two methods but this is not
       important right now. In this document we will use "&lt;-".</p>
-    <p>In this code block assign a list to the variable "mylist"</p>
+    <p>This code block assigns a vector to the variable "myvector"</p>
     <!--begin.rcode prompt=TRUE
-        mylist <- c("This","is","a","list","of","words")
+        myvector <- c("This","is","a","vector","of","words")
         end.rcode-->
     <p>You can see the value of a variable by entering it into the console</p>
     <!--begin.rcode prompt=TRUE
-        mylist
+        myvector
         end.rcode-->
-    <p>We can use all the normal list functions on our variable as if we had typed the whole thing out
+    <p>We can use all the normal vector functions on our variable as if we had typed the whole thing out
       each time</p>
     <!--begin.rcode prompt=TRUE
-        length(mylist)
+        length(myvector)
         end.rcode-->
     <!--begin.rcode prompt=TRUE
-        toupper(mylist)
+        toupper(myvector)
         end.rcode-->
     <p>You can also overwrite a variable by reusing the name when you assign something else</p>
     <!--begin.rcode prompt=TRUE
-        mylist <- c(1,2,3,4)
-        mylist
+        myvector <- c(1,2,3,4)
+        myvector
         end.rcode-->
     <!--begin.rcode prompt=TRUE
-        sum(mylist)
+        sum(myvector)
         end.rcode-->
     <p>It will help you out a lot if you use variable names that semantically link with what they
-      reference. For example call a list of daily sessions "sessions" rather than "list".</p>
+      reference. For example call a vector of daily sessions "sessions" rather than "vector".</p>
     <h5>Functions</h5>
     <p>You have already seen some functions like "sum" and "length".</p>
     <p>To get more information on what a function does type a question mark followed by the name
@@ -310,7 +316,7 @@
 
         sum(x)
         end.rcode-->
-    <p>Summing over a list that contains an NA returns NA as the result. This makes sense when you
+    <p>Summing over a vector that contains an NA returns NA as the result. This makes sense when you
       think that it is meaningless to add NA to a number.</p>
     <!--begin.rcode prompt=TRUE
         sum(x, na.rm=TRUE)
@@ -319,27 +325,27 @@
       values.</p>
     <p>Use the function help to see a list of function arguments and what they mean (e.g. "?sum").</p>
     <p>You can also make your own functions which helps speed up tasks you end up doing a lot. For
-      example, if you were always wanting to insert a new element at the start of a list you could
+      example, if you were always wanting to insert a new element at the start of a vector you could
       write a function like this:</p>
     <!--begin.rcode prompt=TRUE
         # assign to the name of the function as you would a variable
-        # then use "function" followed by the aguments
-        addToStartOfList <- function(element,oldlist) {
+        # then use "function" followed by the arguments
+        addToStartOfVector <- function(element,oldvector) {
             # the actual work is done inside these curly brackets {}
-            newlist <- c(element,oldlist)
+            newvector <- c(element,oldvector)
             # finally "return" the result
-            return(newlist)
+            return(newvector)
         }
 
         # call your function as you would any other function
-        addToStartOfList(5,c(1,2,3,4))
+        addToStartOfVector(5,c(1,2,3,4))
         end.rcode-->
     <p>When copying this code into RStudio, don't copy the "+" symbols that appear at the start of
       each line - they show that R is expecting more input before it starts computing. This means
       you don't always have to fit all your commands on one line.</p>
 
     <h5>Data frames</h5>
-    <p>So far we have looked at lists which contain one dimensional data. Far more common is to
+    <p>So far we have looked at vectorss which contain one dimensional data. Far more common is to
       have a table of two dimensional data. The most common way of working with this kind of structure
       in R is called a <em>data frame</em>.</p>
     <!--begin.rcode prompt=TRUE
@@ -349,7 +355,10 @@
                            )
         foods
         end.rcode-->
-    <p>You can see that when creating your own data frame the columns are just lists with a column name.
+    <p>A data frame is a list of vectors. Recall that a list is a series of elements not necessarily
+      of the same type and you see why a data frame has to be a list of vectors rather than a vector of
+      vectors.</p>
+    <p>You can see that when creating your own data frame the columns are just vectors with a column name.
       Use the <em>names</em> function to see the column names for a data frame.</p>
     <!--begin.rcode prompt=TRUE
         names(foods)
@@ -396,8 +405,10 @@
     <!--begin.rcode prompt=TRUE
         foods[foods$amount > 5 | foods$meal == "Breakfast",]
         end.rcode-->
-    <p>To see the number of rows in a data frame use the function "nrow" rather than length. I don't
-      know why this is and it seems a bit stupid to me.</p>
+    <p>To see the number of rows in a data frame use the function "nrow" rather than length.
+      Using length returns the length of the containing list rather than the length of one
+      of the vectors that contains the data in a column.
+    </p>
     <!--begin.rcode prompt=TRUE
         nrow(foods)
         end.rcode-->
@@ -456,7 +467,7 @@
               row.names(fastest)[1]
               end.rcode-->
       </div></li>
-      <li>Write a function which takes an mpg value as input and retuns a list of all cars
+      <li>Write a function which takes an mpg value as input and returns a vector of all cars
         that have a better mpg than the input value.
         <div class="answer">
           <!--begin.rcode prompt=TRUE
