@@ -425,7 +425,7 @@
         end.rcode-->
     <p>Using a "$" followed by the name of the column is much easier to understand than trying to remember
       which is the eighth column when you are reading old code.</p>
-    <p>Once you have selected a column is behaves just like a vector:</p>
+    <p>Once you have selected a column it behaves just like a vector:</p>
     <!--begin.rcode prompt=TRUE
         # use "?mean" if you don't know what this function does 
         mean(foods$amount)
@@ -433,7 +433,8 @@
     <p>You can easily add a new column to a data frame in a similar way to how you assign a variable.</p>
     <!--begin.rcode prompt=TRUE
         foods$cumulativeAmount <- cumsum(foods$amount)
-
+        # what does cumsum do?
+        # how do you find this information out?
         foods
         end.rcode-->
     <p>Filter rows in a data frame like this:</p>
@@ -711,8 +712,9 @@
     <ol>
       <li>Query the API using more than one dimension (e.g. date and browser).
         <div class="answer">
-          An example is:
           <!--begin.rcode prompt=TRUE, eval=FALSE
+              # this is just an example.
+              # there are many dimensions you could use
               browsersessions <- get_ga(profileid, 
                                         start.date=twoyearsago, 
                                         end.date=yesterday,
@@ -787,7 +789,7 @@
         install.packages("ggplot2")
         end.rcode-->
     <p>First you will see a series of example charts using the sessions data frame made earlier with
-      data pulled from Google Analytics earlier.</p>
+      data pulled from Google Analytics.</p>
     <!--begin.rcode prompt=TRUE, fig.height=8, fig.width=12
         # load the library
         library(ggplot2)
@@ -897,7 +899,7 @@
       place so it is possible for me to provide solutions. I encourage you to try similar
       plots on data pulled in from Google Analytics.</p>
     <p>My guess is that you will find these exercises harder than the others because you have not been
-      introduced to all the functions you will need to complete them./p>
+      introduced to all the functions you will need to complete them.</p>
     <ol>
       <li>Using the mtcars data draw a boxplot showing the amount of horsepower for engines with
         differing numbers of cylinders.
@@ -1059,7 +1061,7 @@
     <h4>Automating reporting with Knitr</h4>
     <p>The scientific community has, for years, had problems with the
       reproducibility of research. Often, raw data (in the rare
-      circumstances) when it is available has been processed in obscure ways
+      circumstances when it is available) has been processed in obscure ways
       before the paper is written up. This means that it is difficult to go
       from the data to the conclusions in the paper.</p>
     <p>This, particularly the bit about obscure data pipelines is also very
