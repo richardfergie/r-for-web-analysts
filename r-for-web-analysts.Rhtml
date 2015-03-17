@@ -265,7 +265,7 @@
     </p>
     <p>Create a vector with more than one element like this:</p>
     <!--begin.rcode prompt=TRUE
-        c("This","is","a","list","of","words")
+        c("This","is","a","vector","of","words")
         end.rcode-->
     <p>There are some functions that operate on a whole vector and return a single answer. I call these
       <em>aggregate functions</em>. There will be more about functions in general later.</p>
@@ -280,7 +280,7 @@
     <p>Other functions operate on each element of the vector and return another vector as the result</p>
     <!--begin.rcode prompt=TRUE
         # make everything uppercase
-        toupper(c("This","is","a","list","of","words"))
+        toupper(c("This","is","a","vector","of","words"))
         end.rcode-->
     <!--begin.rcode prompt=TRUE
         # adds 2 to each element of the vector
@@ -425,7 +425,7 @@
         end.rcode-->
     <p>Using a "$" followed by the name of the column is much easier to understand than trying to remember
       which is the eighth column when you are reading old code.</p>
-    <p>Once you have selected a column is behaves just like a list:</p>
+    <p>Once you have selected a column is behaves just like a vector:</p>
     <!--begin.rcode prompt=TRUE
         # use "?mean" if you don't know what this function does 
         mean(foods$amount)
