@@ -367,12 +367,31 @@
     <p>Instead we use the optional argument "na.rm=TRUE" to tell the sum function to ignore the NA
       values.</p>
     <p>Use the function help to see a list of function arguments and what they mean (e.g. "?sum").</p>
-    <p>You can also make your own functions which helps speed up tasks you end up doing a lot. For
-      example, if you were always wanting to insert a new element at the start of a vector you could
-      write a function like this:</p>
+    <h6>Making your own functions</h6>
+    <p>Creating your own functions is a great way to save time when doing repetitive tasks.</p>
+    <p>Functions are created using the <em>function</em> function (!!?!). Here is a very simple example
+      function that takes no arguments and always returns the answer 42.</p>
     <!--begin.rcode prompt=TRUE
-        # assign to the name of the function as you would a variable
-        # then use "function" followed by the arguments
+        theAnswer <- function() {
+          return(42)
+        }
+
+        theAnswer()
+        end.rcode-->
+    <p>When copying this code into RStudio, don't copy the "+" symbols that appear at the start of
+      each line - they show that R is expecting more input before it starts computing. This means
+      you don't always have to fit all your commands on one line.</p>
+
+    <p>Here is an example that takes two arguments and adds them together:</p>
+    <!--begin.rcode prompt=TRUE
+        adder <- function(x,y) {
+          return(x+y)
+        }
+
+        adder(32,2454)
+        end.rcode-->
+    <p>The final example inserts an element at the start of a vector:</p>
+    <!--begin.rcode prompt=TRUE
         addToStartOfVector <- function(element,oldvector) {
             # the actual work is done inside these curly brackets {}
             newvector <- c(element,oldvector)
@@ -380,12 +399,8 @@
             return(newvector)
         }
 
-        # call your function as you would any other function
         addToStartOfVector(5,c(1,2,3,4))
         end.rcode-->
-    <p>When copying this code into RStudio, don't copy the "+" symbols that appear at the start of
-      each line - they show that R is expecting more input before it starts computing. This means
-      you don't always have to fit all your commands on one line.</p>
 
     <h5>Data frames</h5>
     <p>So far we have looked at vectors which contain one dimensional data. Far more common is to
