@@ -641,6 +641,15 @@
         end.rcode-->
     <p>Then use the <em>authorize</em> function. You will have to insert your own filepath to store the
       authetication token.</p>
+    <p>Tips on picking a filepath:
+      <ol>
+        <li>Choose a path that doesn't exist yet</li>
+        <li>Windows likes it to look like a file. So use (for example) <em>C:/auth.token</em>
+          rather than <em>C:/auth</em> (the '.' seems to make a difference).</li>
+        <li>Start to type a filepath (e.g. type "C:/") and then press tab and RStudio will suggest
+          completions.</li>
+      </ol>
+    </p>
     <!--begin.rcode prompt=TRUE, eval=FALSE
         cachelocation <- "LOCATION TO STORE TOKEN"
         token <- authorize(client.id = clientid, 
@@ -1201,6 +1210,7 @@
         <li><a href="http://www.wallpaperingfog.co.uk/">Neil Charles</a> writes a lot about
           Tableau and football. But he does occasionally post on R and he does work with
           some web data.</li>
+        <li><a href="http://chrisladroue.com/extra/ggplot2Intro/introductionGGplot2/">A very quick introduction to ggplot2</a> has a great overview of more ggplot functionality.</li>
         <li><a href="http://www.r-bloggers.com/">The R Bloggers network</a> aggregates blog
           posts from many different sources. Almost all of it won't be useful for whatever
           it is you want to do but there are occasional nuggets of gold.</li>
