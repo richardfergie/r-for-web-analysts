@@ -1,2 +1,4 @@
 *.Rhtml~
 figure
+.Rhistory
+.RData
