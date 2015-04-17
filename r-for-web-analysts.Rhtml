@@ -790,10 +790,10 @@
               onemonthago <- now() - months(1)
 
               # round to the start of the month
-              startofmonth <- floor_date(onemonthago, units="month")
+              startofmonth <- floor_date(onemonthago, unit="month")
 
               # round to the end of the month
-              endofmonth <- ceiling_date(onemonthago, units="month")
+              endofmonth <- ceiling_date(onemonthago, unit="month")
 
               # get the GA data
               sessions <- get_ga(profileid, 
