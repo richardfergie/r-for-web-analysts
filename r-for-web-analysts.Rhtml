@@ -475,6 +475,26 @@
         end.rcode-->
     <p>There is also a function called "ncol" for the number of columns.</p>
 
+    <h5>SQLDF</h5>
+    <p>If you already have mad SQL skills (and non-digital analysts frequently do) then these methods
+      of manipulating data frames can be a bit tedious.</p>
+    <p>Fortunately there is a library called "sqldf" that means you can use your knowledge of SQL when
+      manipulating a data frame.</p>
+    <!--begin.rcode prompt=TRUE, eval=FALSE
+        # first install the package
+        install.package("sqldf")
+        end.rcode-->
+
+    <!--begin.rcode prompt=TRUE
+        # then load the package
+        library(sqldf)
+        end.rcode-->
+
+    <p>Now we can run SQL queries against our food data frame:</p>
+    <!--begin.rcode prompt=TRUE
+        sqldf("SELECT * FROM foods WHERE amount > 5 OR meal = 'Breakfast'")
+        end.rcode-->
+
     <h5>Exercises</h5>
     <p>R comes with several open data sets built in. For these exercises we will use the "mtcars" data set
       which contains some statistics about certain makes/models of car.
