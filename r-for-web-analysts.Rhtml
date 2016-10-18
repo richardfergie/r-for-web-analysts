@@ -295,7 +295,7 @@
         end.rcode-->
     <!--begin.rcode prompt=TRUE
         # use '==' to check if two things are equal
-        "moist" == c("moist")
+        "word" == c("word")
         end.rcode-->
     <p>This means we can do things like this:</p>
     <!--begin.rcode prompt=TRUE
@@ -444,7 +444,7 @@
       which is the eighth column when you are reading old code.</p>
     <p>Once you have selected a column it behaves just like a vector:</p>
     <!--begin.rcode prompt=TRUE
-        # use "?mean" if you don't know what this function does 
+        # use "?mean" if you don't know what this function does
         mean(foods$amount)
         end.rcode-->
     <p>You can easily add a new column to a data frame in a similar way to how you assign a variable.</p>
@@ -689,9 +689,9 @@
     </p>
     <!--begin.rcode prompt=TRUE, eval=FALSE
         cachelocation <- "LOCATION TO STORE TOKEN"
-        token <- authorize(client.id = clientid, 
+        token <- authorize(client.id = clientid,
                            client.secret = clientsecret,
-                           cache = cachelocation  
+                           cache = cachelocation
                           )
         end.rcode-->
     <p>This will open up your <strong>default</strong> browser where a web page will ask you to
@@ -729,8 +729,8 @@
         yesterday <- today() - days(1)
         twoyearsago <- today() - days(365*2)
 
-        sessions <- get_ga(profileid, 
-                           start.date=twoyearsago, 
+        sessions <- get_ga(profileid,
+                           start.date=twoyearsago,
                            end.date=yesterday,
                            dimensions="ga:date",
                            metrics="ga:sessions",
@@ -751,6 +751,24 @@
         head(sessions)
         end.rcode-->
     <p>If this is working for you then you have got the R part working.</p>
+    <h6>Avoiding sampling</h6>
+    <p>A big motivation for many people using the API is to avoid sampled data. Sampling
+      occurs when a combination of the number of hits and the query dimensions exceeds a
+      threshold. The API can sometimes be used to reduce the amount of or avoid sampling
+      by making a series of requests and summing the results.</p>
+    <p>For example, if you are getting sampled data for last month's report it might be
+      possible to avoid the sampling by requesting data for one day at a time.</p>
+    <p>The argument for this is "fetch.by"
+      <!--begin.rcode prompt=TRUE, eval=FALSE
+          unsampled <- get_ga(profileid,
+                           start.date=today() - days(30),
+                           end.date=yesterday,
+                           dimensions="ga:date",
+                           metrics="ga:sessions",
+                           token=token,
+                           fetch.by="day"
+                          )
+        end.rcode-->
     <h5>Exercises</h5>
     <p>There is just a short set of exercises here which are mainly based around knowing the
       Google Analytics reporting API. The best resource for getting to grips with this is the
@@ -761,8 +779,8 @@
           <!--begin.rcode prompt=TRUE, eval=FALSE
               # this is just an example.
               # there are many dimensions you could use
-              browsersessions <- get_ga(profileid, 
-                                        start.date=twoyearsago, 
+              browsersessions <- get_ga(profileid,
+                                        start.date=twoyearsago,
                                         end.date=yesterday,
                                         dimensions="ga:date,ga:browser",
                                         metrics="ga:sessions",
@@ -774,8 +792,8 @@
       <li>Query the API using more than one metric.
         <div class="answer">
          <!--begin.rcode prompt=TRUE, eval=FALSE
-              sessionsevents <- get_ga(profileid, 
-                                       start.date=twoyearsago, 
+              sessionsevents <- get_ga(profileid,
+                                       start.date=twoyearsago,
                                        end.date=yesterday,
                                        dimensions="ga:date,ga:browser",
                                        metrics="ga:sessions,ga:totalEvents",
@@ -787,8 +805,8 @@
       <li>Query the API using a custom segment. The <a href="https://developers.google.com/analytics/devguides/reporting/core/v3/segments#reference">segment reference documentation</a> might be useful here.
         <div class="answer">
           <!--begin.rcode prompt=TRUE, eval=FALSE
-              twitter <- get_ga(profileid, 
-                                start.date=twoyearsago, 
+              twitter <- get_ga(profileid,
+                                start.date=twoyearsago,
                                 end.date=yesterday,
                                 dimensions="ga:date",
                                 metrics="ga:sessions",
@@ -816,13 +834,13 @@
               endofmonth <- ceiling_date(onemonthago, unit="month")
 
               # get the GA data
-              sessions <- get_ga(profileid, 
-                           start.date=startofmonth, 
+              sessions <- get_ga(profileid,
+                           start.date=startofmonth,
                            end.date=endofmonth,
                            dimensions="ga:date",
                            metrics="ga:sessions",
                            token=token
-                          )             
+                          )
                           end.rcode-->
         </div>
       </li>
@@ -863,7 +881,7 @@
         avg <- mean(sessions$sessions)
         ggplot(sessions,aes(x=date,y=sessions)) +
             geom_line() +
-            geom_hline(yintercept=avg, size=5, color="red") + 
+            geom_hline(yintercept=avg, size=5, color="red") +
             theme_minimal()
             end.rcode-->
     <p>Change the axis labels, make them bigger and add a chart title</p>
@@ -987,7 +1005,7 @@
         </div>
       </li>
     </ol>
-    
+
     <h4>Forecasting</h4>
     <p>R has good library support for many methods of forecasting. I suspect
       that it has the best and easiest support out of all the languages you
@@ -1055,7 +1073,7 @@
         totalrows <- nrow(sessions) + nrow(forecastdf)
         lastdaysessions <- tail(sessions$sessions,1)
 
-        forecastdata <- data.frame(day=c(1:totalrows), 
+        forecastdata <- data.frame(day=c(1:totalrows),
                            actual=c(sessions$sessions,rep(NA,nrow(forecastdf))),
                            forecast=c(rep(NA,nrow(sessions)-1),
                                       lastdaysessions,
@@ -1068,11 +1086,11 @@
                                            forecastdf$"Lo 80")
                            )
 
-        ggplot(forecastdata, aes(x=day)) + 
-            geom_line(aes(y=actual),color="black") + 
-            geom_line(aes(y=forecast),color="blue") + 
+        ggplot(forecastdata, aes(x=day)) +
+            geom_line(aes(y=actual),color="black") +
+            geom_line(aes(y=forecast),color="blue") +
             geom_ribbon(aes(ymin=forecastlower,ymax=forecastupper),
-                        alpha=0.4, fill="green") + 
+                        alpha=0.4, fill="green") +
             xlim(c(720,750)) +
             ylim(c(0,300)) +
             xlab("Day") +
@@ -1102,8 +1120,8 @@
         <em>n</em>, make a forcast for day <em>n</em> using data from the last <em>n-1</em>
         days. Then compare the values for day <em>n</em> with the forecast.</li>
     </ol>
-        
-    
+
+
     <h4>Automating reporting with Knitr</h4>
     <p>The scientific community has, for years, had problems with the
       reproducibility of research. Often, raw data (in the rare
@@ -1211,7 +1229,7 @@
        ggplot(ga_data,aes(x=date,y=sessions)) + geom_line()
     end.rcode--&gt;
     &lt;p&gt;And here is some commentary about the above chart&lt;/p&gt;
-      
+
   &lt;/body&gt;
 &lt;/html&gt;
       </code>
@@ -1256,7 +1274,7 @@
       </ul>
     </p>
     <p>Once again, thank you for reading this guide. Please let me know any feedback you might have.</p>
-      
+
 
   </div>
 </body>
