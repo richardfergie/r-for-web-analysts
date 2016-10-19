@@ -613,23 +613,25 @@
         <li>Forgetting to enable the Analytics API.</li>
       </ol>
     </p>
-    <p>Here are the instructions. Let me know any parts that are particularly unclear and
+    <p>Here are the instructions. The design of the Google developer console changes rapidly; hopefully this is still accurate.</p>
+    <p>Let me know any parts that are particularly unclear and
       I will illustrate with screenshots.</p>
     <ol>
-      <li>Go to <a href="https://console.developers.google.com/project">https://console.developers.google.com/project</a></li>
+      <li>Go to <a href="https://console.developers.google.com/project" target="_blank">https://console.developers.google.com/project</a></li>
       <li>Click "create project"</li>
       <li>The project name and the project id are not very important, but you should name
         it something meaningful so you don't accidentally delete it at a later date. Ignore
         the advanced options and click "create".</li>
       <li>Wait for the project to be created. When it is created you are automatically redirected to the project page</li>
-      <li>Click "enable an API" on the bottom right. The button may be hidden behind the messages notification dialogue</li>
-      <li>Find the analytics API in the long list of APIs and click the button labelled "OFF" in the status column to enable it</li>
-      <li>In the side menu on the right click "credentials" which is part of the "APIs &amp; Auth" menu section</li>
-      <li>Click "create new client ID"</li>
-      <li>Select "installed application" as the application type and the click "configure consent screen"</li>
-      <li>Fill in the details in the consent screen form. Only email address and product name are compulsory. Click "save"</li>
-      <li>Select "installed application" as the application type. Then select "other" as the installed application type. Click "create client ID"</li>
-    </ol>
+      <li>Search for "analytics" and enable the "Analytics API" by selecting it from the list and clicking "Enable".</li>
+      <li>Click "Go to credentials"</li>
+      <li>Select "Other UI (e.g. Windows, CLI tool)" in the "Where will you be calling the API from?" dropdown</li>
+      <li>Check "User data" for the "What data will you be accessing" field. And click "What credentials do I need?" to proceed.</li>
+      <li>Create a client id - the default of "Other client 1" is fine.</li>
+      <li>You will also have to fill in some details for the OAuth consent screen. This is shown to people when they authorise your app. Only the project name and email address fields are compulsory.</li>
+      <li>Eventually you will be shown your Client ID. You also need the Client secret as well. If you don't see the secret, click "Done" and navigate to "Credentials.</li>
+      <li>Click your Client ID in the list and you should see the Client ID and Client Secret.</li>
+      </ol>
     <p>You should now see your client ID and client secret on the screen. If you also see
       things like "email address" and "javascript origins" then you have generated the wrong
       type of client ID and should start again from step eight.</p>
@@ -651,14 +653,16 @@
         end.rcode-->
     <p>If you get errors about a lack of file system permissions doing this then you will have to
       ask your IT department to install libraries for you.</p>
-    <p>There are three main choices of libraries to work with Google Analytics in R:
+    <p>There are four main choices of libraries to work with Google Analytics in R:
       <ol>
         <li><a href="http://cran.r-project.org/web/packages/RGA/index.html">RGA</a></li>
         <li><a href="http://cran.r-project.org/web/packages/RGoogleAnalytics/">RGoogleAnalytics</a> - this
           is supported by <a href="http://www.tatvic.com/">Tatvic</a></li>
         <li><a href="https://github.com/skardhamar/rga">rga</a> - not available on CRAN so slightly harder
-          to install. There are some API techniques to reduce how often sampled data is returned; this
-          library makes these easier to use than the others.</li>
+          to install.</li>
+        <li><a href="http://code.markedmondson.me/googleAnalyticsR/">GoogleAnalyticR</a> - a nice library with
+          good integration with other Google APIs (e.g. search console). Also has good support for shiny server.
+          I am starting to switch some projects to this.</a>
       </ol>
     <p>All the libraries are similar in both how they operate and what you can do with them. For this
       tutorial we will use RGA.</p>
