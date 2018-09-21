@@ -1012,7 +1012,7 @@
     <p>This plot shows how closely our forecasting model is fitting the original data.</p>
     <p>If the fit looks good then proceed to making a forecast:</p>
     <!--begin.rcode prompt=TRUE, fig.width=12, fig.height=8
-        sessionforecast <- forecast.HoltWinters(forecastmodel, h=30) # 30 days in future
+        sessionforecast <- forecast(forecastmodel, h=30) # 30 days in future
         plot(sessionforecast, xlim=c(100,109))
         end.rcode-->
     <p>The shaded areas represent 80% and 95% prediction intervals for the forecast.</p>
