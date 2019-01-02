@@ -726,7 +726,7 @@
         # This makes generation of the document quicker
         # and means that I won't accidentally leak client data
         library(lubridate)
-        sessions <- read.csv("~/text/sessions.csv")
+        sessions <- read.csv("sessions.csv")
         sessions$date <- ymd(sessions$date)
         end.rcode-->
     <!--begin.rcode prompt=TRUE
