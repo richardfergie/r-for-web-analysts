@@ -309,7 +309,7 @@
     <h5>Variables</h5>
     <p>You can assign a particular result to a variable to make it easier to refer to later</p>
     <p>In R people generally use "&lt;-" to assign to a variable, but you might also see code where people
-      use "=". I think there is some kind of subtle difference between the two methods but this is not
+      use "=". There are some subtle differences between the two methods but this is not
       important right now. In this document we will use "&lt;-".</p>
     <p>This code block assigns a vector to the variable "myvector"</p>
     <!--begin.rcode prompt=TRUE
@@ -434,6 +434,23 @@
         end.rcode-->
     <p>Using a "$" followed by the name of the column is much easier to understand than trying to remember
       which is the eighth column when you are reading old code.</p>
+    <p>You can also select a column like this:</p>
+    <!--begin.rcode prompt=TRUE
+        foods[['meal']]
+        end.rcode-->
+    <p>Use this method rather than the "$" method when:
+       <ol>
+          <li>Your column names are reserved words in R. For example if you had a column called "NA".</li>
+          <li>You are constructing the column name programatically. For example if the column name is one of the inputs to a function.
+        </ol>
+    </p>
+    <!--begin.rcode prompt=TRUE
+        getColumn <- function(data, columnName) {
+          ## data$columnName won't work
+          return(data[[columnName]])
+        }
+        getColumn(foods,"meal")
+        end.rcode-->
     <p>Once you have selected a column it behaves just like a vector:</p>
     <!--begin.rcode prompt=TRUE
         # use "?mean" if you don't know what this function does
